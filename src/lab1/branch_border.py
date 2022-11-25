@@ -3,73 +3,63 @@ import math
 from scipy.optimize import linprog
 
 
-DEBUF_PRINT = True
-
-
-def grep_row(c, i, number):
+def grep_row(c, ind, number):
+    """ Creates canonical boundary row """
     row = []
-    for index, ind in zip(np.zeros(len(c)), range(len(c))):
-        if ind == i:
-            index = number
-        row.append(index)
+    for ix, i in zip(np.zeros(len(c)), range(len(c))):
+        if i == ind:
+            ix = number
+        row.append(ix)
     return row
 
 
 def branch_border(c, A, b, bnd):
-    x_opt = []
-    rec = -np.inf
-    stack_ab = list()
-    stack_ab.append([A, b])
-    while len(stack_ab) > 0:
+    x = []
+    r = -np.inf
+    stack = list()
+    stack.append([A, b])
+    while len(stack) > 0:
 
-        next_ilp = stack_ab.pop()
-        next_A, next_b = next_ilp[0], next_ilp[1]
-        simplex = linprog(c=c, A_ub=next_A, b_ub=next_b, bounds=bnd, method="simplex")
-        vector_x = simplex.x
+        nextAb = stack.pop()
+        A, b = nextAb[0], nextAb[1]
+        res = linprog(c=c, A_ub=A, b_ub=b, bounds=bnd, method="simplex")
+        v_x = res.x
 
-        if DEBUF_PRINT:
-            print()
-            print('Current Vars \nA: ' + str(next_A) + '\nb: ' + str(next_b))
-            print('Vector x: ' + str(vector_x))
-
-        if not simplex.success:
+        if not res.success:
             continue
 
-        float_x, float_indice = None, None
+        fx, fi = None, None
 
-        for xi, x in enumerate(vector_x):
-            if x.is_integer():
+        for xi, xv in enumerate(v_x):
+            if xv.is_integer():
                 continue
-            float_x = x
-            float_indice = xi
+            fx = xv
+            fi = xi
 
-        new_rec = simplex.fun
-        
-        if DEBUF_PRINT:
-            print('Current record: ' + str(new_rec))
+        new_r = res.fun
 
-        if not float_x:
-            if new_rec > rec:
-                rec = new_rec
-                x_opt = vector_x
+        if not fx:
+            if new_r > r:
+                r = new_r
+                x = v_x
 
-        if new_rec <= rec:
+        if new_r <= r:
             continue
 
-        left_A = next_A.copy()
-        left_b = next_b.copy()
-        left_A.append(grep_row(c, float_indice, -1))
-        left_b.append(math.ceil(float_x))
+        lA = A.copy()
+        lb = b.copy()
+        lA.append(grep_row(c, fi, -1))
+        lb.append(math.ceil(fx))
 
-        right_A = next_A.copy()
-        right_b = next_b.copy()
-        right_A.append(grep_row(c, float_indice, 1))
-        right_b.append(math.floor(float_x))
+        rA = A.copy()
+        rb = b.copy()
+        rA.append(grep_row(c, fi, 1))
+        rb.append(math.floor(fx))
 
-        stack_ab.append([left_A, left_b])
-        stack_ab.append([right_A, right_b])
+        stack.append([lA, lb])
+        stack.append([rA, rb])
 
-    return x_opt
+    return x
 
 
 if __name__ == '__main__':
