@@ -1,4 +1,4 @@
-from lab1.branch_border import *
+from branch_border.branch_border import *
 
 
 def test_branch_border():

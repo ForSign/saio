@@ -7,7 +7,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 addopts = [
-    "--cov=lab1",
+    "--cov=branch_border",
+    "--cov=gomori",
 ]
 
 testpaths = [

@@ -7,7 +7,7 @@ def get_f(a):
   return 1 - (ceil(a) - a)
 
 
-def gomori(c, A, b, bounds):
+def gomori(c, A, b, bound):
     while True:
 
         res = linprog( c, A, b, bounds = bound, method = 'simplex')
@@ -32,36 +32,22 @@ def gomori(c, A, b, bounds):
                 flag = 1
                 break
 
-        print("res \n",res.x)
-        print("Jb \n",Jb)
-        print("k \n",k)
-        print("flag \n",flag)
-
         if flag == 0:
             return x
 
         ab = np.array([np.copy(A[:,i-1]) for i in Jb]).transpose()
-        print("A \n",A)
-        print("b \n",b)
-        print("ab \n", ab)
-
         ab_inv = np.linalg.inv(ab)
-        print("ab inv \n", ab_inv)
 
         l = [0 for i in range(len(Jb))]
         l[k] = 1
         y = np.dot(l, ab_inv)
-        print("y \n", y)
         small_a = []
 
         for i in range(len(A[0])):
             small_a.append(np.dot(y, A[:,i]))
 
         small_b = np.dot(y, b)
-        print("sA\n", small_a)
-        print("sb\n", small_b)
         Jnb = [i for i in range(1, len(c) + 1) if i not in Jb]
-        print("jnb\n", Jnb)
         new_a = [0 for _ in range(len(A[0]))]
 
         for i in range(len(Jnb)):
@@ -71,9 +57,6 @@ def gomori(c, A, b, bounds):
 
         for i in arr:
             i += [0]
-
-        print("arr: \n", arr)
-        print("new_a: \n", new_a)
 
         arr.append(new_a)
         A = np.array(arr)
@@ -86,18 +69,17 @@ def gomori(c, A, b, bounds):
         b = np.array(arr)
 
         bound.append([0, None])
-        print("\n\n")
 
 
 if __name__ == '__main__':
-    # c = np.array([-21, -11,0])
-    # A = np.array([[7, 4,1]])
-    # b = np.array([13])
-    # bound = [[0, None], [0, None], [0, None]]
+    c = np.array([-21, -11,0])
+    A = np.array([[7, 4,1]])
+    b = np.array([13])
+    bound = [[0, None], [0, None], [0, None]]
 
-    c = np.array([-2, -3, 0, 0])
-    A = np.array([[1, 4, 1, 0], [2, 3, 0, 1]])
-    b = np.array([14, 12])
-    bound = [[0, None], [0, None], [0, None], [0, None]]
+    # c = np.array([-2, -3, 0, 0])
+    # A = np.array([[1, 4, 1, 0], [2, 3, 0, 1]])
+    # b = np.array([14, 12])
+    # bound = [[0, None], [0, None], [0, None], [0, None]]
 
     print(gomori(c, A, b, bound))
