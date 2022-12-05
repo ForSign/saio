@@ -51,11 +51,12 @@ def method_ford_fulkerson(start, end, row, graph_arr):
 
 if __name__ == '__main__':
     matrix = [[0, 7, 4, 0, 0, 0],
-             [0, 0, 4, 0, 2, 0],
-             [0, 0, 0, 8, 4, 0],
-             [0, 0, 0, 0, 4, 5],
-             [0, 0, 0, 0, 0, 12],
-             [0, 0, 0, 0, 0, 0]]
+              [0, 0, 4, 0, 2, 0],
+              [0, 0, 0, 8, 4, 0],
+              [0, 0, 0, 0, 4, 5],
+              [0, 0, 0, 0, 0, 12],
+              [0, 0, 0, 0, 0, 0]]
     start = 0
     end = 5
-    print("Max: %d " % method_ford_fulkerson(start, end, len(matrix), matrix)[0])
+
+    print(method_ford_fulkerson(start, end, len(matrix), matrix))

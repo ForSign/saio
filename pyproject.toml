@@ -9,6 +9,9 @@ build-backend = "setuptools.build_meta"
 addopts = [
     "--cov=branch_border",
     "--cov=gomori",
+    "--cov=dag_longest_path",
+    "--cov=ford_fulkerson",
+    "--cov=khun",
 ]
 
 testpaths = [
