@@ -1,0 +1,4 @@
+from hungarian.hungarian import *
+
+def test_hungarian():
+	pass
