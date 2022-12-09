@@ -8,7 +8,7 @@ def resource_allocation(x, f, n, c):
 
     for i in range(1, n):
         arr = []
-        arr_for_x_0 = []
+        ax_0 = []
 
         for xi in x:
             list_bk = [0 for _ in range(len(x))]
@@ -21,10 +21,10 @@ def resource_allocation(x, f, n, c):
 
             b_k = max(list_bk)
             arr.append(b_k)
-            arr_for_x_0.append(list_bk.index(b_k))
+            ax_0.append(list_bk.index(b_k))
 
         B.append(arr)
-        x_0.append(arr_for_x_0)
+        x_0.append(ax_0)
 
     print("B: ")
 
@@ -47,10 +47,10 @@ def resource_allocation(x, f, n, c):
 
 
 if __name__ == '__main__':
-    X = [0, 1, 2, 3, 4, 5]
+    X =  [0, 1, 2, 3, 4, 5]
     F = [[0, 1, 2, 3, 4, 5],
          [0, 0, 1, 2, 4, 7],
          [0, 2, 2, 3, 3, 5]]
     N = 3  # K
     C = 5  # y
-    H = resource_allocation_task(X, F, N, C)
+    H = resource_allocation(X, F, N, C)
